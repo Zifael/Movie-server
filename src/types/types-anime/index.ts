@@ -1,7 +1,8 @@
-export interface iRequestBody {
+export interface IAnime {
     title: string
-    status: 'Вышел' | 'Онгоинг' | 'Еще не вышел',
-    releaseDate: string,
-    description: string,
-    linkPlayer: string,
+    description: string
+    linkPlayer: string
+    releaseDate: string 
+    status: 'Вышел' | 'Онгоинг' | 'Еще не вышел'       
+    
 }

@@ -1,25 +1,28 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
+import { Anime } from "../../models/anime-model/animeModel"
 import { animeService } from "../../services/anime-service/anime-service"
 import { TypeRequestBody } from "../../types"
-import { iRequestBody } from "../../types/types-anime"
-
+import { IAnime } from "../../types/types-anime"
 
 class AnimeController {
-
-    create(req: TypeRequestBody<iRequestBody>, res: Response ) {
-        const { title, description, linkPlayer, releaseDate, status} = req.body
-        animeService.create()
-        res.send({message: 'hello'})
+    async create(req: TypeRequestBody<IAnime>, res: Response, next: NextFunction) {
+        try {
+            const anime = await animeService.create(req.body)
+            return res.json({message: 'Аниме успешно создалось', anime})
+        } catch (error) {                  
+            next(error)            
+        }
     }
 
-    getAll(req: Request, res: Response) {
-        
+    async getAll(req: Request, res: Response) {
+        const anime = await Anime.findAll()        
+        res.json(anime)
     }
 
-    getOne(req: Request, res: Response) {
-        
+    getOne() {
+
     }
 }
 
 
-export default new AnimeController()
+export default  new AnimeController()
