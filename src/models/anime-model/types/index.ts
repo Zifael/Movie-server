@@ -5,7 +5,8 @@ export type AnimeModel = {
     status: 'Вышел' | 'Онгоинг' | 'Еще не вышел',
     releaseDate: string,
     description: string,
-    linkPlayer: string,
+    video: string,
+    img?: string,    
 }
 
 export type RaitingModel = {

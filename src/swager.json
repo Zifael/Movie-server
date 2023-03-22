@@ -1,0 +1,172 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Anime Api",
+        "description": ""        
+    },
+    "servers": [
+        {
+            "url": "https://localhost:5000/api"            
+        }
+    ],
+    "paths": {
+        "/anime": {
+            "post": {
+                "summary": "Create anime",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schema/Anime"                                
+                            }
+                            
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response create anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }                                                                                
+                                    }
+                                },
+                                "example": {
+                                    "message": "Аниме успешно создано"                                    
+                                }
+                            }
+                        }
+                    }
+                }
+
+            },
+            "get": {
+                "summary": "Get all anime",
+                "parameters": {
+                    "in": "query"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Response create anime",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schema/ResponseAnime"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schema": {
+            "Anime": {
+                "type": "object",               
+                "properties": {                        
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "relaseDate": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "img": {
+                        "type": "string"
+                    },
+                    "video": {
+                        "type": "string"
+                    },
+                    "idGenre": {
+                        "type": "array"
+                    }
+                },
+                "example": {                        
+                    "title": "Name Anime",
+                    "description": "Описание",
+                    "relaseDate": "12.12.25",
+                    "status": "Еще не вышел",
+                    "img": "Картика",
+                    "video": "Видео",
+                    "idGenre": ["Фантастика"]
+                }
+                
+            },
+            "ResponseAnime": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "title": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "relaseDate": {
+                            "type": "string"
+                        },
+                        "status": {
+                            "type": "string"
+                        },
+                        "video": {
+                            "type": "string"
+                        },
+                        "img": {
+                            "type": "string"
+                        },
+                        "createdAt": {
+                            "type": "string"
+                        },
+                        "updatedAt": {
+                            "type": "string"
+                        }, 
+                        "Genre": {
+                            "type": "array"
+                        }                                                        
+                    },
+                    "example": {
+                        "id": 1,
+                        "title": "Naruto",
+                        "description": "Описание",
+                        "relaseDate": "12.12.25",
+                        "status": "Еще не вышел",
+                        "video": "Видео",
+                        "img": "Картика",
+                        "Genre": [
+                            {
+                                "id": 2,
+                                "genre": "Приключения",
+                                "createdAt": "2023-03-20T22:37:28.617Z",
+                                "updatedAt": "2023-03-20T22:37:28.617Z",
+                                "AnimeGenre": {
+                                    "id": 2,
+                                    "createdAt": "2023-03-20T22:45:04.841Z",
+                                    "updatedAt": "2023-03-20T22:45:04.841Z",
+                                    "AnimeId": 1,
+                                    "GenreId": 2
+                                }
+                            }
+                        ]                                              
+                    }
+                }
+            }
+        }
+    }
+   
+}

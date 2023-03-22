@@ -1,21 +1,21 @@
-import { DataTypes, Model, Optional } from "sequelize"
+import { DataTypes, HasManyAddAssociationsMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, Model, Optional } from "sequelize"
 import { sequelize } from '../../database'
 import { AnimeModel, RaitingModel } from "./types"
 
 
 interface IAnimeCreate extends Optional<AnimeModel, 'id' | 'rating'>{}
 
-
-
-
 class Anime extends Model<AnimeModel, IAnimeCreate> {
+    declare addGenres: HasManyAddAssociationsMixin<Genre, number>
+    declare setGenres: HasManySetAssociationsMixin<Genre, number>    
     declare id: number
     declare title: string
     declare rating: number
     declare status: 'Вышел' | 'Онгоинг' | 'Еще не вышел'
     declare releaseDate: string
     declare description: string   
-    declare linkPlayer: string    
+    declare video: string  
+    declare img?: string     
 }
 
 class Genre extends Model {
@@ -48,7 +48,8 @@ Anime.init(
         status: { type: DataTypes.STRING, allowNull: false },
         releaseDate: { type: DataTypes.STRING, allowNull: false },
         description: { type: DataTypes.STRING },
-        linkPlayer: { type: DataTypes.STRING, allowNull: false }
+        video: { type: DataTypes.STRING, allowNull: false },
+        img: { type: DataTypes.STRING }
     },
     { sequelize, tableName: 'Anime'}
 )
