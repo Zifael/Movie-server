@@ -7,21 +7,26 @@ interface Files {
     video?: string
 }
 
-export const deleteFiles = (files: Files) => {    
-   
-    if (files.img) {
-        fs.unlink(path.resolve(__dirname, '..', `static/img/${files.img}`), (err) => {
-            if (err) {
-                throw err
-            }
-        })
-    }  
+export const deleteFiles = (files: Files) => {   
+    
+    for (let i in files) {
+        
+        let key = i as keyof Files
 
-    if (files.video) {
-        fs.unlink(path.resolve(__dirname, '..', `static/video/${files.video}`), (err) => {
-            if (err) {
-                throw err
-            }
-        })  
+        if (files[key]) {
+            // Check if the file exists
+            fs.stat(path.resolve(__dirname, '..', `static/${key}/${files[key]}`), (err) => {
+                // if there is a file, delete it
+                if (!err) {
+                    fs.unlink(path.resolve(__dirname, '..', `static/${key}/${files[key]}`), (err) => {
+                        if (err) {
+                            throw err
+                        }
+                    })
+                }
+            })
+        }
     }
+    
+ 
 }

@@ -76,19 +76,19 @@ class AnimeService {
             throw ApiError.NotFound('Аниме с таким id не найдено')
         }        
         
-        let files
+        let files = {}       
 
         if (img) {
             // Deleting old static files
             deleteFiles({ img: anime.img })
             // And create new static files
-            files = createFiles({ img })
+            files = {...files, ...createFiles({ img })}
         }  
         if (video) {
             // Deleting old static files
             deleteFiles({ video: anime.video })
             // And create new static files
-            files = createFiles({ video })
+            files = {...files, ...createFiles({ video })}
         }       
         
         const update = await anime.update({ ...animeUpdate, ...files }) 
