@@ -5,6 +5,7 @@ import { UserDto } from "../../Dto/userDto"
 import { tokenService } from "./token-service"
 import { mailService } from "../mail-service"
 import { v4 as uuidv4 } from 'uuid'
+import { changesService } from "./changes-serivce"
 
 class UserService {
 
@@ -23,21 +24,25 @@ class UserService {
     }
 
     async create(email: string, login: string, password: string) {
-        const user = await User.findOne({ where: { email } })        
+        const user = await User.findOne({ where: { email } })   
+        const userLogin = await User.findOne({ where: { login } }) 
+            
         if (user) {
             throw ApiError.BadRequest('A user with this email address already exists')
         }
-        const hashPassword = await bcrypt.hash(password, 5)        
-        
-        let roleDB = await Role.findOne({ where: { value: 'User' } })
+        if (userLogin) {
+            throw ApiError.BadRequest('A user with this login already exists')
+        }
 
         // activateLink
         const activateLink = uuidv4() + 'link'
-
+        const hashPassword = await bcrypt.hash(password, 5)        
+        
+        let roleDB = await Role.findOne({ where: { value: 'User' } })    
         // if there is no "user" role in the database, create it
         if (!roleDB) {
             roleDB = await Role.create({ value: 'User' })
-        }
+        }      
         
         const createUser = await User.create({email, login, password: hashPassword, activateLink})
         await createUser.addRoles([roleDB])  
@@ -64,8 +69,7 @@ class UserService {
         const hashPassword = await bcrypt.compare(password, user.password)
         if (!hashPassword) {
             throw ApiError.BadRequest('Неверный пароль')
-        }      
-
+        } 
         return this.createTokenAndSaveDB(user)
     }
 
@@ -93,18 +97,23 @@ class UserService {
     }
 
     async changeLogin(id: number, login: string) {
+        const data = await changesService.changeLogin(id, login)       
+        return data
+    }
+
+    async checkPassword(id: number, password: string) {
         const user = await User.findOne({ where: { id } })
         if (!user) {
             throw ApiError.NotFound('User not found')
         }
-        if (user.login === login) {
-            throw ApiError.BadRequest('Change the name')
-        }
-              
-        user.login = login
-        await user.save()
-        return user.login
+        const result = await bcrypt.compare(password, user.password)
+        return result
     }
+
+    async changePassword(id: number, password: string) {
+        await changesService.changePassword(id, password)
+    }
+ 
 }
 
 export const userService = new UserService()

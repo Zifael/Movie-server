@@ -3,9 +3,9 @@ import { sequelize } from '../../database'
 import { MovieModel, RaitingModel } from "./types"
 
 
-interface IAnimeCreate extends Optional<MovieModel, 'id' | 'rating'>{}
+interface IMovieCreate extends Optional<MovieModel, 'id' | 'rating'>{}
 
-class Movie extends Model<MovieModel, IAnimeCreate> {
+class Movie extends Model<MovieModel, IMovieCreate> {
     declare addGenres: HasManyAddAssociationsMixin<Genre, number>
     declare setGenres: HasManySetAssociationsMixin<Genre, number>    
     declare id: number
@@ -90,10 +90,6 @@ MovieGenre.init(
     },
     { sequelize, tableName: 'MovieGenre' }
 )
-
-
-
-
 
 export {
     Movie,

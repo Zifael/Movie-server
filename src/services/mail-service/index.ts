@@ -31,6 +31,21 @@ class MailService {
                 `
         })
     }
+
+    async sendChangePasswordMail(to: string, link: string) {
+        await this.transporter.sendMail({
+            from: process.env.SMPT_USER,
+            to,
+            subject: 'Change password',
+            html: 
+                `
+                    <div>
+                        <h1>To change to a password, click on the link</h1>
+                        <a href="${link}">Change password</a>
+                    </div>                
+                `
+        })
+    }
 }
 
 export const mailService = new MailService()

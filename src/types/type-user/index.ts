@@ -10,4 +10,9 @@ export interface IUserDTO {
 }
 
 
+export interface IChangePassword {
+    id: number,
+    password: string
+}
+
 

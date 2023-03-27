@@ -3,7 +3,7 @@ import { ISetLogin } from "../../models/user-model/types";
 import { userService } from "../../services/user-service";
 import { TypeRequestBody, TypeRequestParams } from "../../types";
 import { IReqCookie } from "../../types/type-token";
-import { IUser } from "../../types/type-user";
+import { IChangePassword, IUser } from "../../types/type-user";
 
 
 class UserController {
@@ -69,9 +69,28 @@ class UserController {
         } catch (error) {
             next(error)
         }
+    }  
+
+    async checkPassword(req: TypeRequestBody<IChangePassword>, res: Response, next: NextFunction) {
+        try {
+            const { id, password } = req.body
+            const result = await userService.checkPassword(id, password)
+            res.json({ result })
+        } catch (error) {
+            next(error)
+        }
     }
+
+    async changePassword(req: TypeRequestBody<IChangePassword>, res: Response, next: NextFunction) {
+        try {
+            const { id, password } = req.body
+            await userService.changePassword(id, password)
+            res.json({ message: 'Password changed successfully' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
 }
-
-
 
 export const userController = new UserController()
