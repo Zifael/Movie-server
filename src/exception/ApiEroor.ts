@@ -17,4 +17,8 @@ export class ApiError extends Error {
     static NotFound(message: string) {
         return new ApiError(404, message)
     }
+
+    static UnauthorizedError() {
+        return new ApiError(401, 'Пользователь не авторизован')
+    }
 }

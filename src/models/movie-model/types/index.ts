@@ -1,4 +1,4 @@
-export type AnimeModel = {
+export type MovieModel = {
     id: number,
     title: string,
     rating: number,

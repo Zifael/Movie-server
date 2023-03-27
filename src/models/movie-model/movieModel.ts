@@ -1,11 +1,11 @@
 import { DataTypes, HasManyAddAssociationsMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, Model, Optional } from "sequelize"
 import { sequelize } from '../../database'
-import { AnimeModel, RaitingModel } from "./types"
+import { MovieModel, RaitingModel } from "./types"
 
 
-interface IAnimeCreate extends Optional<AnimeModel, 'id' | 'rating'>{}
+interface IAnimeCreate extends Optional<MovieModel, 'id' | 'rating'>{}
 
-class Anime extends Model<AnimeModel, IAnimeCreate> {
+class Movie extends Model<MovieModel, IAnimeCreate> {
     declare addGenres: HasManyAddAssociationsMixin<Genre, number>
     declare setGenres: HasManySetAssociationsMixin<Genre, number>    
     declare id: number
@@ -31,16 +31,16 @@ class FavoriteList extends Model {
     declare id: number
 }
 
-class FavoriteAnime extends Model {
+class FavoriteMovie extends Model {
     declare id: number
 }
 
-class AnimeGenre extends Model {
+class MovieGenre extends Model {
     declare id: number
 }
 
 
-Anime.init(
+Movie.init(
     {
         id: { type: DataTypes.INTEGER, unique: true, primaryKey: true, autoIncrement: true },
         title: { type: DataTypes.STRING, unique: true, allowNull: false },
@@ -51,7 +51,7 @@ Anime.init(
         video: { type: DataTypes.STRING, allowNull: false },
         img: { type: DataTypes.STRING }
     },
-    { sequelize, tableName: 'Anime'}
+    { sequelize, tableName: 'Movie'}
 )
 
 Genre.init(
@@ -73,22 +73,22 @@ FavoriteList.init(
     {
         id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true}
     },
-    { sequelize, tableName: 'FavoriteList' }
+    { sequelize, tableName: 'FavoriteLists' }
 )
 
 
-FavoriteAnime.init(
+FavoriteMovie.init(
     {
         id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true}
     },
-    { sequelize, tableName: 'FavoriteAnime' }
+    { sequelize, tableName: 'FavoriteMovie' }
 )
 
-AnimeGenre.init(
+MovieGenre.init(
     {
         id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true}
     },
-    { sequelize, tableName: 'AnimeGenre' }
+    { sequelize, tableName: 'MovieGenre' }
 )
 
 
@@ -96,10 +96,10 @@ AnimeGenre.init(
 
 
 export {
-    Anime,
+    Movie,
     Rating,
     FavoriteList,
-    FavoriteAnime,
+    FavoriteMovie,
     Genre,
-    AnimeGenre
+    MovieGenre
 }

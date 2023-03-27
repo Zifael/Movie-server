@@ -10,28 +10,32 @@ interface IFiles {
 }
 
 export const createFiles = (files: TypeFiles) => {        
-
+    
     const objectFiles: IFiles = {}
+    
+    if (files) {
+        const {img} = files
+        // creating an image
+        if (img) {
+            const fileNameImage = uuidv4() + '.jpg'    
+            img.mv(path.resolve(__dirname, '..', 'static/img', fileNameImage))
+            objectFiles.img = fileNameImage
+        }
 
-    const {img} = files
-    // creating an image
-    if (img) {
-        const fileNameImage = uuidv4() + '.jpg'    
-        img.mv(path.resolve(__dirname, '..', 'static/img', fileNameImage))
-        objectFiles.img = fileNameImage
+        const {video} = files
+        // creating a video
+        if (video) {        
+            if (video.name.split('.')[1] !== 'mp4') {
+                throw ApiError.BadRequest('Данный файл не являтся видео')
+            }
+            const fileNameVideo = uuidv4() + '.mp4'
+            video.mv(path.resolve(__dirname, '..', 'static/video', fileNameVideo))
+            objectFiles.video = fileNameVideo
+        }
     }
    
 
-    const {video} = files
-    // creating a video
-    if (video) {        
-        if (video.name.split('.')[1] !== 'mp4') {
-            throw ApiError.BadRequest('Данный файл не являтся видео')
-        }
-        const fileNameVideo = uuidv4() + '.mp4'
-        video.mv(path.resolve(__dirname, '..', 'static/video', fileNameVideo))
-        objectFiles.video = fileNameVideo
-    }
+    
    
     return objectFiles
 }

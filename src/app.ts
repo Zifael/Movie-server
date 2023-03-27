@@ -8,9 +8,10 @@ import fileupload from 'express-fileupload'
 import swagerUI from 'swagger-ui-express'
 import swagger from './swager.json'
 import path from 'path'
+import cookieParser from 'cookie-parser'
 const model = require('./models')
 
-const app: express.Application = express()
+const app = express()
 
 app.use(cors({
     credentials: true,
@@ -18,6 +19,7 @@ app.use(cors({
 }))
 app.use(fileupload({ createParentPath: true }))
 app.use(express.json())
+app.use(cookieParser())
 
 // Getting files from the "static" folder
 app.use('/image', express.static(path.resolve(__dirname, 'static/img')))

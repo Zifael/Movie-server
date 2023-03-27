@@ -1,34 +1,37 @@
 
-import {User, Role, UserRole} from './user-model/userModel'
-import { Anime, FavoriteAnime, FavoriteList, Rating, Genre, AnimeGenre } from './anime-model/animeModel'
+import {User, Role, UserRole, RefreshToken} from './user-model/userModel'
+import { Movie, FavoriteMovie, FavoriteList, Rating, Genre, MovieGenre } from './movie-model/movieModel'
 
 
 
 User.belongsToMany(Role, { through: UserRole })
 Role.belongsToMany(User, { through: UserRole })
 
-Anime.belongsToMany(Genre, { through: AnimeGenre })
-Genre.belongsToMany(Anime, { through: AnimeGenre })
+Movie.belongsToMany(Genre, { through: MovieGenre })
+Genre.belongsToMany(Movie, { through: MovieGenre })
+
+User.hasMany(RefreshToken)
+RefreshToken.belongsTo(User)
 
 User.hasMany(Rating)
 Rating.belongsTo(User)
 
-Anime.hasOne(Rating)
-Rating.belongsTo(Anime)
+Movie.hasOne(Rating)
+Rating.belongsTo(Movie)
 
 User.hasOne(FavoriteList)
 FavoriteList.belongsTo(User)
 
-FavoriteList.hasMany(FavoriteAnime)
-FavoriteAnime.belongsTo(FavoriteList)
+FavoriteList.hasMany(FavoriteMovie)
+FavoriteMovie.belongsTo(FavoriteList)
 
 
 export default {
     User, 
     Role,    
-    Anime,
+    Movie,
     Rating,
     FavoriteList,
-    FavoriteAnime,
+    FavoriteMovie,
     Genre
 }

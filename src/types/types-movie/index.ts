@@ -1,18 +1,18 @@
-export interface IAnime {
+export interface IMovie {
     title: string
     description: string      
     releaseDate: string 
-    status: 'Вышел' | 'Онгоинг' | 'Еще не вышел',
+    status: 'Вышел' | 'Еще не вышел',
     idGenre: number[]       
 }
 
-export interface IQueryAnime {
+export interface IQueryMovie {
     genre: string | string[]
     limit: number
     page: number
 }
 
-export interface IUpdateAnime {
+export interface IUpdateMovie {
     id: number
     title: string
     description?: string      
@@ -22,7 +22,3 @@ export interface IUpdateAnime {
 }
 
 
-export interface IFilesAnime {
-    img?: string
-    video?: string
-}

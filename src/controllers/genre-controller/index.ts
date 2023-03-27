@@ -1,15 +1,22 @@
 import { NextFunction } from "express";
 import { Request, Response } from "express";
-import { Genre } from "../../models/anime-model/animeModel";
-import { genreService } from "../../services/genre-service/genre-service";
+import { ApiError } from "../../exception/ApiEroor";
+import { Genre } from "../../models/movie-model/movieModel";
+import { genreService } from "../../services/genre-service";
 import { TypeRequestBody } from "../../types";
 import { IGenre } from "../../types/types-genre";
 
 class GenreController {
     async create(req: TypeRequestBody<IGenre> , res: Response, next: NextFunction) {
         try {          
-            const { genre } = req.body     
+            const { genre } = req.body       
+            
+            const genreDb = await Genre.findOne({ where: { genre } })
                
+            if (genreDb) {
+                throw ApiError.BadRequest('Жанр с таким названием уже существует')
+            }
+
             const genreCreate = await genreService.create(genre)
 
             return res.json({message: 'Жанр успешно создан', genre: genreCreate})
@@ -29,4 +36,4 @@ class GenreController {
     }
 }
 
-export default new GenreController()
+export const genreController = new GenreController()
