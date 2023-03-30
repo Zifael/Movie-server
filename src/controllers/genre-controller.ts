@@ -1,10 +1,10 @@
 import { NextFunction } from "express";
 import { Request, Response } from "express";
-import { ApiError } from "../../exception/ApiEroor";
-import { Genre } from "../../models/movie-model/movieModel";
-import { genreService } from "../../services/genre-service";
-import { TypeRequestBody } from "../../types";
-import { IGenre } from "../../types/types-genre";
+import { ApiError } from "../exception/ApiEroor";
+import { Genre } from "../models/movie-model/movieModel";
+import { genreService } from "../services/genre-service";
+import { TypeRequestBody } from "../types";
+import { IGenre } from "../types/types-genre";
 
 class GenreController {
     async create(req: TypeRequestBody<IGenre> , res: Response, next: NextFunction) {

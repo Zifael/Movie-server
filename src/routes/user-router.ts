@@ -1,17 +1,21 @@
 import { Router } from "express";
 import { userController } from "../controllers/user-controller";
+import { authMiddleware } from "../middlewares/auth-middleware";
+import { validationFormMiddleware } from "../middlewares/validationForm-middleware";
 
 const userRouter = Router()
 
 
-userRouter.post('/registration', userController.create)
+userRouter.post('/registration', validationFormMiddleware, userController.create)
 userRouter.post('/login', userController.login)
 userRouter.post('/logout', userController.logout)
 userRouter.post('/refresh', userController.refresh)
-userRouter.put('/change-login', userController.changeLogin)
-userRouter.get('/activate/:link', userController.activate)
-userRouter.post('/check-password', userController.checkPassword)
-userRouter.put('/change-password', userController.changePassword)
-
-
+// Activating a profile by email
+userRouter.get('/activate/:link', userController.activate) 
+userRouter.post('/check-password', authMiddleware, userController.checkPassword)
+userRouter.put('/change-login', authMiddleware, userController.changeLogin)
+userRouter.put('/change-password', authMiddleware, userController.changePassword)
+userRouter.post('/sendMessageResetPassowrd', userController.sendMessageResetPassword)
+userRouter.post('/resetPassowrd', userController.resetPassword)
+userRouter.post('/getAdmin', authMiddleware, userController.getAdimn)
 export default userRouter

@@ -14,5 +14,6 @@ export interface IReqCookie extends Request {
 
 export interface UserIDJwtPayload extends JwtPayload {
     email: string,
-    role: string[]
+    login: string
+    roles: string[]
 }

@@ -6,6 +6,7 @@ import { tokenService } from "./token-service"
 import { mailService } from "../mail-service"
 import { v4 as uuidv4 } from 'uuid'
 import { changesService } from "./changes-serivce"
+import { FavoriteList } from "../../models/movie-model/movieModel"
 
 class UserService {
 
@@ -23,7 +24,8 @@ class UserService {
         }
     }
 
-    async create(email: string, login: string, password: string) {
+    async create(email: string, login: string, password: string) {        
+
         const user = await User.findOne({ where: { email } })   
         const userLogin = await User.findOne({ where: { login } }) 
             
@@ -45,10 +47,12 @@ class UserService {
         }      
         
         const createUser = await User.create({email, login, password: hashPassword, activateLink})
-        await createUser.addRoles([roleDB])  
+        await createUser.addRoles([roleDB])        
         // Sending a message to the mail
-        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activateLink}`)      
-       
+        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activateLink}`)    
+        // create a favorites list for the user        
+        await FavoriteList.create({ UserId: createUser.id })  
+               
         return this.createTokenAndSaveDB(createUser)
     }
 
@@ -61,14 +65,14 @@ class UserService {
         await user.save()
     }
 
-    async login(email: string, password: string) {
-        const user = await User.findOne({ where: { email } })
+    async login(login: string, password: string) {
+        const user = await User.findOne({ where: { login } })
         if (!user) {
-            throw ApiError.BadRequest('Пользователь с таким email не найден')
+            throw ApiError.BadRequest('A user with this login was not found')
         }
         const hashPassword = await bcrypt.compare(password, user.password)
         if (!hashPassword) {
-            throw ApiError.BadRequest('Неверный пароль')
+            throw ApiError.BadRequest('Invalid password')
         } 
         return this.createTokenAndSaveDB(user)
     }
@@ -114,6 +118,46 @@ class UserService {
         await changesService.changePassword(id, password)
     }
  
+
+    async sendMessageResetPassword(email: string) {
+        const user = await User.findOne({ where: { email } })
+        if (!user) {
+            throw ApiError.NotFound('email not found')
+        }
+        const resetCode = uuidv4()
+        user.resetCode = resetCode
+        await user.save()
+        mailService.sendResetPasswordMail(user.email, `${process.env.API_URL}/api/user/resetPassowrd/code=${resetCode}`, user.login)
+    }
+
+    async resetPassword(code: string, password: string) {        
+        const user = await User.findOne( { where: { resetCode: code } } )
+        if (!user) {
+            throw ApiError.NotFound('User not found')
+        }
+        const hashPassword = await bcrypt.hash(password, 5)  
+        user.password = hashPassword
+        user.resetCode = null
+        await user.save()
+    }
+
+    async getAdmin(userId: number, key: string) {
+        const user = await User.findOne({ where: { id: userId } })        
+        if (!user) {
+            throw ApiError.NotFound('User not found')
+        }
+        
+        let roleAdmin = await Role.findOne({ where: { value: 'ADMIN' } })
+        if (!roleAdmin) {
+            roleAdmin = await Role.create({ value: 'ADMIN' })
+        }
+
+        if (key !== process.env.GET_ADMIN) {            
+            throw ApiError.BadRequest('Invalid key')            
+        }
+        
+        await user.addRoles([roleAdmin])
+    }
 }
 
 export const userService = new UserService()

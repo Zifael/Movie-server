@@ -1,3 +1,7 @@
+import { Request } from "express"
+import { FileArray } from "express-fileupload"
+import { TypeRequestBody } from "."
+
 export interface IMovie {
     title: string
     description: string      
@@ -20,5 +24,10 @@ export interface IUpdateMovie {
     status?: 'Вышел' | 'Онгоинг' | 'Еще не вышел',
     idGenre?: number[],       
 }
+
+
+
+
+
 
 

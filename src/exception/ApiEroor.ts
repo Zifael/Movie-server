@@ -18,7 +18,11 @@ export class ApiError extends Error {
         return new ApiError(404, message)
     }
 
+    static IsNotAdmin() {
+        return new ApiError(403, 'You are not an administrator')
+    }
+
     static UnauthorizedError() {
-        return new ApiError(401, 'Пользователь не авторизован')
+        return new ApiError(401, 'The user is not logged in')
     }
 }

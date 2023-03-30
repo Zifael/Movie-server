@@ -1,12 +1,13 @@
 import { Router } from "express";
-import { movieController } from '../controllers/movie-сontroller'
+import { movieController } from '../controllers/movie-controller'
+import { checkAdmminMiddleware } from "../middlewares/checkAdmin-middleware";
 
-const animeRouter = Router()
+const movieRouter = Router()
 
-animeRouter.post('/', movieController.create)
-animeRouter.get('/', movieController.getAll)
-animeRouter.get('/:title', movieController.getOne)
-animeRouter.put('/', movieController.update)
-animeRouter.delete('/', movieController.delete)
+movieRouter.post('/', checkAdmminMiddleware, movieController.create)
+movieRouter.get('/', movieController.getAll)
+movieRouter.get('/:id', movieController.getOne)
+movieRouter.put('/', checkAdmminMiddleware, movieController.update)
+movieRouter.delete('/', checkAdmminMiddleware, movieController.delete)
 
-export default animeRouter
+export default movieRouter

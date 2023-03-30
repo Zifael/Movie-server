@@ -1,8 +1,8 @@
-import { ApiError } from "../../exception/ApiEroor";
-import { Movie, Genre } from "../../models/movie-model/movieModel";
-import { IMovie, IQueryMovie, IUpdateMovie } from "../../types/types-movie";
-import { createFiles } from "../../helpers/createFiles";
-import { deleteFiles } from "../../helpers/deleteFiles";
+import { ApiError } from "../exception/ApiEroor";
+import { Movie, Genre } from "../models/movie-model/movieModel";
+import { IMovie, IQueryMovie, IUpdateMovie } from "../types/types-movie";
+import { createFiles } from "../helpers/createFiles";
+import { deleteFiles } from "../helpers/deleteFiles";
 
  
 class MovieService {
@@ -13,24 +13,21 @@ class MovieService {
         const genreDb = await Genre.findAll({ where: { id: idGenre } })  
 
         if (movieDB) {
-            throw ApiError.BadRequest('Аниме с таким названием уже существует')
+            throw ApiError.BadRequest('A film with this name already exists')
         }        
               
         if (genreDb.length === 0) {
-            throw ApiError.NotFound('Жанры, отправленые в запросе, не найдены в базе данных')
+            throw ApiError.NotFound('Genres sent in the request were not found in the database')
         }
 
         const {img, video} = createFiles(movieFiles)
 
         if (!video) {
-            throw ApiError.BadRequest('Добавьте видеофайл')
+            throw ApiError.BadRequest('Add a video file')
         }     
 
         const createMovie = await Movie.create({ title, description, releaseDate, status, img, video })       
-        await createMovie.addGenres(genreDb)                 
-        return {            
-            message: 'Аниме успешно создано'          
-        }
+        await createMovie.addGenres(genreDb)     
     }
 
     async getAll(queryMovie: IQueryMovie) {
@@ -62,29 +59,47 @@ class MovieService {
         return movie
     }
 
-    async update(movieUpdate: IUpdateMovie, movieFilesUpdate: any) {        
-        const { id, idGenre } = movieUpdate
-        const { img, video } = movieFilesUpdate
+    async getOne(id: number) {
+        const movie = await Movie.findOne({ 
+            where: { id },
+            include: Genre
+        })
+        if (!movie) {
+            throw ApiError.NotFound('Movie not found')
+        }
+        return movie
+    }
+
+    async update(movieUpdate: IUpdateMovie, movieFilesUpdate: null | any) {        
+        const { id, title ,idGenre } = movieUpdate        
         
         const movie = await Movie.findOne({ where: { id } })        
         if (!movie) {
-            throw ApiError.NotFound('Аниме с таким id не найдено')
+            throw ApiError.NotFound('No movie with this id was found')
         }        
-        
-        let files = {}       
 
-        if (img) {
-            // Deleting old static files
-            deleteFiles({ img: movie.img })
-            // And create new static files
-            files = {...files, ...createFiles({ img })}
-        }  
-        if (video) {
-            // Deleting old static files
-            deleteFiles({ video: movie.video })
-            // And create new static files
-            files = {...files, ...createFiles({ video })}
-        }       
+        const movieTitle = await Movie.findOne({ where: { title }})
+        if (title === movieTitle!.title) {
+            throw ApiError.BadRequest('A film with this name already exists')
+        }
+        
+        let files = {} 
+        if (movieFilesUpdate) {
+            const { img, video } = movieFilesUpdate
+
+            if (img) {
+                // Deleting old static files
+                deleteFiles({ img: movie.img })
+                // And create new static files
+                files = {...files, ...createFiles({ img })}
+            }  
+            if (video) {
+                // Deleting old static files
+                deleteFiles({ video: movie.video })
+                // And create new static files
+                files = {...files, ...createFiles({ video })}
+            } 
+        }            
         
         const update = await movie.update({ ...movieUpdate, ...files }) 
         
@@ -94,16 +109,15 @@ class MovieService {
         }        
     }
 
-    async delete(id: number) {    
-        console.log(id)    
+    async delete(id: number) {               
         const movie = await Movie.findOne({ where: { id } })
         if (!movie) {
-            throw ApiError.NotFound('Аниме с таким id не найдено')
+            throw ApiError.NotFound('No movie with this id was found')
         }
         // Deleting static files
         deleteFiles({ img: movie.img, video: movie.video })
-        await movie.destroy()
-              
+
+        await movie.destroy()   
     }
 }
 

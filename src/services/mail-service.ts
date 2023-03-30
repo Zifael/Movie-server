@@ -32,16 +32,17 @@ class MailService {
         })
     }
 
-    async sendChangePasswordMail(to: string, link: string) {
+    async sendResetPasswordMail(to: string, link: string, login: string) {
         await this.transporter.sendMail({
             from: process.env.SMPT_USER,
             to,
-            subject: 'Change password',
+            subject: 'Reset password',
             html: 
                 `
                     <div>
-                        <h1>To change to a password, click on the link</h1>
-                        <a href="${link}">Change password</a>
+                        <h1>Hi ${login}</h1>
+                        <h2>To reset to a password, click on the link</h2>
+                        <a href="${link}">Reset password</a>
                     </div>                
                 `
         })

@@ -1,8 +1,8 @@
-import { IUser, IUserDTO } from "../../types/type-user";
+import { IUserDTO } from "../../types/type-user";
 import jwt from 'jsonwebtoken'
 import { ITokens, UserIDJwtPayload } from "../../types/type-token";
 import { RefreshToken } from "../../models/user-model/userModel";
-import { ApiError } from "../../exception/ApiEroor";
+
 
 class TokenService {
     createTokens(user: IUserDTO): ITokens {        
@@ -34,10 +34,24 @@ class TokenService {
         return token
     }
 
-    validateRefreshToken(refreshToken: string) {
-        const userData = <UserIDJwtPayload>jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string)        
-        return userData
+    validateAccessToken(accessToken: string){       
+        try {            
+            const userData = <UserIDJwtPayload>jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string)               
+            return userData
+        } catch (error) {
+            return null
+        }
     }
+
+    validateRefreshToken(refreshToken: string) {
+        try {
+            const userData = <UserIDJwtPayload>jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string)        
+            return userData
+        } catch (error) {
+            return null
+        }
+    }  
+    
 }
 
 export const tokenService = new TokenService()

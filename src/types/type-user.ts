@@ -1,3 +1,5 @@
+import { Request } from 'express'
+
 export interface IUser {
     email: string
     login: string
@@ -16,3 +18,11 @@ export interface IChangePassword {
 }
 
 
+export interface TypeResetPassword extends Request {
+    body: {
+        password: string
+    },
+    query: {
+        code: string
+    }
+}

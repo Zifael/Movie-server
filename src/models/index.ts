@@ -25,6 +25,8 @@ FavoriteList.belongsTo(User)
 FavoriteList.hasMany(FavoriteMovie)
 FavoriteMovie.belongsTo(FavoriteList)
 
+Movie.hasOne(FavoriteMovie)
+FavoriteMovie.belongsTo(Movie)
 
 export default {
     User, 

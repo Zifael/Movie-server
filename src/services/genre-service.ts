@@ -1,5 +1,5 @@
-import { ApiError } from "../../exception/ApiEroor"
-import { Genre } from "../../models/movie-model/movieModel"
+import { ApiError } from "../exception/ApiEroor"
+import { Genre } from "../models/movie-model/movieModel"
 
 export class GenreService {
     async create(genre: string) {

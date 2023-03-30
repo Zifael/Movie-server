@@ -1,14 +1,14 @@
 import { NextFunction, Response } from "express"
-import { Movie } from "../../models/movie-model/movieModel"
-import { movieService } from "../../services/movie-service"
-import { TypeRequestBody, TypeRequestParams, TypeRequestQurey } from "../../types"
-import { IMovie, IQueryMovie, IUpdateMovie } from "../../types/types-movie"
+import { Movie } from "../models/movie-model/movieModel"
+import { movieService } from "../services/movie-service"
+import { TypeRequestBody, TypeRequestParams, TypeRequestQurey } from "../types"
+import { IMovie, IQueryMovie, IUpdateMovie } from "../types/types-movie"
 
 class MovieController {
     async create(req: TypeRequestBody<IMovie>, res: Response, next: NextFunction) {
         try {
-            const data = await movieService.create(req.body, req.files)            
-            return res.json(data)
+            await movieService.create(req.body, req.files)            
+            return res.json({ message: 'The film was successfully created' })
         } catch (error) {                  
             next(error)            
         }
@@ -23,10 +23,11 @@ class MovieController {
         }
     }
 
-    async getOne(req: TypeRequestParams<{ title: string }>, res: Response, next: NextFunction) {
+    async getOne(req: TypeRequestParams<{ id: number }>, res: Response, next: NextFunction) {
         try {
-            const { title } = req.params            
-            const movieOne = await Movie.findOne({ where: { title } } )            
+            console.log(req.params)
+            const { id } = req.params            
+            const movieOne = await movieService.getOne(id)        
             res.json(movieOne)
         } catch (error) {
             next(error)

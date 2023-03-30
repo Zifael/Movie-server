@@ -5,6 +5,7 @@ export interface UserModel {
     password: string
     activateLink: string
     isActivate: boolean
+    resetCode: string
 }
 
 export interface RefreshTokenModel {
@@ -16,4 +17,9 @@ export interface RefreshTokenModel {
 export interface ISetLogin {
     id: number,
     login: string
+}
+
+export interface getAdimn {
+    userId: number
+    key: string,
 }

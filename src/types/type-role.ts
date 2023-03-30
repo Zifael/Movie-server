@@ -3,6 +3,6 @@ export interface IRole {
 }
 
 export interface IAddRole {
-    idRole: number,
-    idUser: number
+    roleId: number,
+    userId: number
 }
