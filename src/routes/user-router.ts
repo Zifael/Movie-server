@@ -12,7 +12,6 @@ userRouter.post('/logout', userController.logout)
 userRouter.post('/refresh', userController.refresh)
 // Activating a profile by email
 userRouter.get('/activate/:link', userController.activate) 
-userRouter.post('/check-password', authMiddleware, userController.checkPassword)
 userRouter.put('/change-login', authMiddleware, userController.changeLogin)
 userRouter.put('/change-password', authMiddleware, userController.changePassword)
 userRouter.post('/sendMessageResetPassowrd', userController.sendMessageResetPassword)

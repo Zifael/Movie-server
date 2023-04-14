@@ -1,13 +1,19 @@
-import { DataTypes, DATE, HasManyAddAssociationsMixin, HasManySetAssociationsMixin, Model } from "sequelize"
+import { DataTypes, HasManyAddAssociationsMixin, HasManySetAssociationsMixin, Model } from "sequelize"
 import { sequelize } from '../../database'
-import { FavoriteListModel, FavroiteMovieModel, IFavoriteListCreate, IFavoriteMovieCreate, IMovieCreate, IRaitingCreate, MovieModel, RaitingModel } from "./types"
-
-
-
+import { 
+    FavoriteListModel,
+     FavroiteMovieModel, 
+     IFavoriteListCreate, 
+     IFavoriteMovieCreate, 
+     IMovieCreate, 
+     IRaitingCreate, 
+     MovieModel, 
+     RaitingModel 
+} from "./types"
 
 class Movie extends Model<MovieModel, IMovieCreate> {
     declare addGenres: HasManyAddAssociationsMixin<Genre, number>
-    declare setGenres: HasManySetAssociationsMixin<Genre, number>    
+    declare setGenres: HasManySetAssociationsMixin<Genre, number>     
     declare id: number
     declare title: string
     declare rating: number
@@ -73,7 +79,7 @@ Genre.init(
 Rating.init(
     {
         id: {type: DataTypes.INTEGER, primaryKey: true, unique: true, autoIncrement: true},
-        rating: { type: DataTypes.INTEGER },
+        rating: { type: DataTypes.DECIMAL },
         UserId: { type: DataTypes.INTEGER },
         MovieId: { type: DataTypes.INTEGER }
     },

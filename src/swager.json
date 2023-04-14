@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "Anime Api",
+        "title": "Movie Api",
         "description": ""        
     },
     "servers": [
@@ -10,15 +10,18 @@
             "url": "https://localhost:5000/api"            
         }
     ],
-    "paths": {
-        "/anime": {
+    "paths": {   
+        "/movie": {            
             "post": {
-                "summary": "Create anime",
+                "tags": [
+                    "Movie"
+                ],               
+                "summary": "Create movie",                  
                 "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schema/Anime"                                
+                                "$ref": "#/components/schema/Movie"                                
                             }
                             
                         }
@@ -26,20 +29,13 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Response create anime",
+                        "description": "Response create movie",
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }                                                                                
-                                    }
-                                },
-                                "example": {
-                                    "message": "Аниме успешно создано"                                    
+                                "schema": {                                    
+                                    "$ref": "#/components/schema/ResponseMovie"                                    
                                 }
+                                
                             }
                         }
                     }
@@ -47,28 +43,42 @@
 
             },
             "get": {
-                "summary": "Get all anime",
+                "tags": ["Movie"],
+                "summary": "Get all movie",
                 "parameters": {
                     "in": "query"
                 },
                 "responses": {
                     "200": {
-                        "description": "Response create anime",
+                        "description": "Response create movie",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schema/ResponseAnime"
+                                    "$ref": "#/components/schema/ResponseMovies"
                                 }
                             }
                         }
                     }
                 }
+            },
+            "get/{id}": {
+                "tags": [ "Movie"],
+                "summary": "Get one movie",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of the cat that we want to match",
+                        "type": "string"
+                    }
+                ]                
             }
         }
     },
     "components": {
         "schema": {
-            "Anime": {
+            "Movie": {
                 "type": "object",               
                 "properties": {                        
                     "title": {
@@ -94,77 +104,85 @@
                     }
                 },
                 "example": {                        
-                    "title": "Name Anime",
-                    "description": "Описание",
+                    "title": "Naruto",
+                    "description": "Description",
                     "relaseDate": "12.12.25",
-                    "status": "Еще не вышел",
-                    "img": "Картика",
-                    "video": "Видео",
-                    "idGenre": ["Фантастика"]
+                    "status": "Сame out",
+                    "img": "Image",
+                    "video": "Video",
+                    "idGenre": [1]
                 }
                 
             },
-            "ResponseAnime": {
+            "ResponseMovies": {
                 "type": "array",
                 "items": {
                     "type": "object",
                     "properties": {
-                        "id": {
-                            "type": "integer"
-                        },
-                        "title": {
-                            "type": "string"
-                        },
-                        "description": {
-                            "type": "string"
-                        },
-                        "relaseDate": {
-                            "type": "string"
-                        },
-                        "status": {
-                            "type": "string"
-                        },
-                        "video": {
-                            "type": "string"
-                        },
-                        "img": {
-                            "type": "string"
-                        },
-                        "createdAt": {
-                            "type": "string"
-                        },
-                        "updatedAt": {
-                            "type": "string"
-                        }, 
-                        "Genre": {
-                            "type": "array"
-                        }                                                        
-                    },
-                    "example": {
-                        "id": 1,
-                        "title": "Naruto",
-                        "description": "Описание",
-                        "relaseDate": "12.12.25",
-                        "status": "Еще не вышел",
-                        "video": "Видео",
-                        "img": "Картика",
-                        "Genre": [
-                            {
-                                "id": 2,
-                                "genre": "Приключения",
-                                "createdAt": "2023-03-20T22:37:28.617Z",
-                                "updatedAt": "2023-03-20T22:37:28.617Z",
-                                "AnimeGenre": {
-                                    "id": 2,
-                                    "createdAt": "2023-03-20T22:45:04.841Z",
-                                    "updatedAt": "2023-03-20T22:45:04.841Z",
-                                    "AnimeId": 1,
-                                    "GenreId": 2
-                                }
-                            }
-                        ]                                              
-                    }
+                        "$ref": "#/components/schema/ResponseMovie"
+                    }                                    
                 }
+            },
+            "ResponseMovie": {                        
+                
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "relaseDate": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string"
+                    },
+                    "video": {
+                        "type": "string"
+                    },
+                    "img": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string"
+                    },
+                    "updatedAt": {
+                        "type": "string"
+                    }, 
+                    "Genre": {
+                        "type": "array"
+                    }                                                        
+                },
+                "example": {
+                    "id": 1,
+                    "title": "Naruto",
+                    "description": "Description",
+                    "relaseDate": "12.12.25",
+                    "status": "Сame out",
+                    "video": "Video",
+                    "img": "Image",
+                    "Genre": [
+                        {
+                            "id": 1,
+                            "genre": "Adventure",
+                            "createdAt": "2023-03-20T22:37:28.617Z",
+                            "updatedAt": "2023-03-20T22:37:28.617Z",
+                            "AnimeGenre": {
+                                "id": 2,
+                                "createdAt": "2023-03-20T22:45:04.841Z",
+                                "updatedAt": "2023-03-20T22:45:04.841Z",
+                                "AnimeId": 1,
+                                "GenreId": 1
+                            }
+                        }
+                    ]                                              
+                }
+                
             }
         }
     }

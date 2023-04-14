@@ -6,7 +6,7 @@ import { RefreshToken } from "../../models/user-model/userModel";
 
 class TokenService {
     createTokens(user: IUserDTO): ITokens {        
-        const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET as string, { expiresIn: '15m' })
+        const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET as string, { expiresIn: '5d' })
         const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_SECRET as string, { expiresIn: '30d' })
         return {
             accessToken,

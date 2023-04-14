@@ -22,8 +22,8 @@ app.use(express.json())
 app.use(cookieParser())
 
 // Getting files from the "static" folder
-app.use('/image', express.static(path.resolve(__dirname, 'static/img')))
-app.use('/video', express.static(path.resolve(__dirname, 'static/video')))
+app.use('/api/image', express.static(path.resolve(__dirname, 'static/img')))
+app.use('/api/video', express.static(path.resolve(__dirname, 'static/video')))
 
 app.use('/api', router)
 

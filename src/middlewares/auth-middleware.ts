@@ -4,7 +4,7 @@ import { tokenService } from "../services/user-service/token-service";
 import { ReqHeader } from "../types";
 
 export const authMiddleware = (req: ReqHeader, res: Response, next: NextFunction) => {
-    try {
+    try {        
         const authorizationHeader = req.headers.accesstoken as string
         
         if (!authorizationHeader) {

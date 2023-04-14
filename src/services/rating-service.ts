@@ -16,12 +16,12 @@ class RatingService {
         if (!movie) {
             throw ApiError.NotFound('Movie not found')
         }    
-        if (0 > rating || rating > 10) {
-            throw ApiError.BadRequest('The minimum value is 0, the maximum is 10')
+        if (0 > rating || rating > 5) {
+            throw ApiError.BadRequest('The minimum value is 0, the maximum is 5')
         }
 
         const ratingPrevious = await Rating.findOne({ where: { UserId: user.id, MovieId: movie.id } })   
-
+        
         if (!ratingPrevious) {
             await Rating.create({UserId, MovieId, rating})
         }   

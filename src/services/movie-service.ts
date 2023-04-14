@@ -27,7 +27,13 @@ class MovieService {
         }     
 
         const createMovie = await Movie.create({ title, description, releaseDate, status, img, video })       
-        await createMovie.addGenres(genreDb)     
+        await createMovie.addGenres(genreDb)
+
+        const result = await Movie.findOne({ 
+            where: { title },
+            include: Genre
+        })
+        return result
     }
 
     async getAll(queryMovie: IQueryMovie) {
@@ -71,7 +77,7 @@ class MovieService {
     }
 
     async update(movieUpdate: IUpdateMovie, movieFilesUpdate: null | any) {        
-        const { id, title ,idGenre } = movieUpdate        
+        const { id, title, idGenre } = movieUpdate       
         
         const movie = await Movie.findOne({ where: { id } })        
         if (!movie) {
@@ -79,7 +85,7 @@ class MovieService {
         }        
 
         const movieTitle = await Movie.findOne({ where: { title }})
-        if (title === movieTitle!.title) {
+        if (movieTitle && movieTitle.title === title) {
             throw ApiError.BadRequest('A film with this name already exists')
         }
         
@@ -107,6 +113,11 @@ class MovieService {
             const genreDb = await Genre.findAll({ where: { id: idGenre } })      
             await update.setGenres(genreDb)
         }        
+        const result = await Movie.findOne({ 
+            where: { title },
+            include: Genre
+        })
+        return result
     }
 
     async delete(id: number) {               

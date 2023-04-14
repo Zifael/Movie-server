@@ -11,7 +11,7 @@ class UserController {
         try {
             const { email, login, password } = req.body
             const data = await userService.create(email, login, password)
-            res.cookie('refreshToken', data.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+            res.cookie('refreshToken', data.tokens.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })            
             res.json(data)
         } catch (error) {
             next(error)
@@ -60,17 +60,6 @@ class UserController {
             next(error)
         }
     }
-    
-
-    async checkPassword(req: TypeRequestBody<IChangePassword>, res: Response, next: NextFunction) {
-        try {
-            const { id, password } = req.body
-            const result = await userService.checkPassword(id, password)
-            res.json({ result })
-        } catch (error) {
-            next(error)
-        }
-    }
 
     async changeLogin(req: TypeRequestBody<ISetLogin>, res: Response, next: NextFunction) {
         try {
@@ -80,17 +69,17 @@ class UserController {
         } catch (error) {
             next(error)
         }
-    }  
-
+    }    
+    
     async changePassword(req: TypeRequestBody<IChangePassword>, res: Response, next: NextFunction) {
         try {
-            const { id, password } = req.body
-            await userService.changePassword(id, password)
-            res.json({ message: 'Password changed successfully' })
+            const { id, password, newPassowrd } = req.body
+            await userService.changePassword(id, password, newPassowrd)
+            res.json({ message: 'change completed successfully' })
         } catch (error) {
             next(error)
         }
-    }   
+    }
 
     async sendMessageResetPassword(req: TypeRequestBody<{ email: string }>, res: Response, next: NextFunction) {
         try {

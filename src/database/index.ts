@@ -7,6 +7,6 @@ export const sequelize = new Sequelize(
     {
         dialect: 'postgres',
         host: process.env.DB_HOST,
-        logging: false
+        logging: false,        
     }
 )

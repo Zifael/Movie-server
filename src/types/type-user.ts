@@ -14,7 +14,8 @@ export interface IUserDTO {
 
 export interface IChangePassword {
     id: number,
-    password: string
+    password: string,
+    newPassowrd: string
 }
 
 

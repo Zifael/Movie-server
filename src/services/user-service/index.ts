@@ -13,14 +13,15 @@ class UserService {
     async createTokenAndSaveDB(user: User) {
         const rolesDB = await user.getRoles()
         const roles = rolesDB.map(e => e.dataValues.value)        
-        const userDto = new UserDto(user.email, user.login, roles)
+        const userDto = new UserDto(user.id, user.email, user.login, roles)        
         const tokens = tokenService.createTokens({ ...userDto })
         await tokenService.saveToken(user.id, tokens.refreshToken)
         return {
             tokens: {
                 ...tokens
             },
-            user: userDto           
+            user: userDto,
+            activateLink: user.activateLink           
         }
     }
 
@@ -105,18 +106,22 @@ class UserService {
         return data
     }
 
-    async checkPassword(id: number, password: string) {
-        const user = await User.findOne({ where: { id } })
+    async changePassword(id: number, password: string, newPassowrd: string) {
+        const user = await User.findOne({ where: { id } })        
         if (!user) {
             throw ApiError.NotFound('User not found')
         }
-        const result = await bcrypt.compare(password, user.password)
-        return result
-    }
-
-    async changePassword(id: number, password: string) {
-        await changesService.changePassword(id, password)
-    }
+        const result = await bcrypt.compare(password, user.password)        
+        if (!result) {
+            throw ApiError.BadRequest('The password is invalid')
+        }
+        if (password === newPassowrd) {
+            throw ApiError.BadRequest("You can't change your previous password")
+        }        
+        const createNewPassword = await bcrypt.hash(newPassowrd, 5)                
+        user.password = createNewPassword
+        await user.save()
+    }    
  
 
     async sendMessageResetPassword(email: string) {
@@ -157,6 +162,7 @@ class UserService {
         }
         
         await user.addRoles([roleAdmin])
+        
     }
 }
 

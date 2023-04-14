@@ -7,8 +7,8 @@ import { IMovie, IQueryMovie, IUpdateMovie } from "../types/types-movie"
 class MovieController {
     async create(req: TypeRequestBody<IMovie>, res: Response, next: NextFunction) {
         try {
-            await movieService.create(req.body, req.files)            
-            return res.json({ message: 'The film was successfully created' })
+            const movie = await movieService.create(req.body, req.files)            
+            return res.json({ message: 'The film was successfully created', movie })
         } catch (error) {                  
             next(error)            
         }
@@ -24,8 +24,7 @@ class MovieController {
     }
 
     async getOne(req: TypeRequestParams<{ id: number }>, res: Response, next: NextFunction) {
-        try {
-            console.log(req.params)
+        try {            
             const { id } = req.params            
             const movieOne = await movieService.getOne(id)        
             res.json(movieOne)
@@ -36,8 +35,8 @@ class MovieController {
 
     async update(req: TypeRequestBody<IUpdateMovie>, res: Response, next: NextFunction) {
         try {            
-            await movieService.update(req.body, req.files)
-            res.json({ message: 'Обновление выполнено' })
+            const movie = await movieService.update(req.body, req.files)
+            res.json({ message: 'Обновление выполнено', movie })
         } catch (error) {
             next(error)
         }
