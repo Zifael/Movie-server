@@ -18,7 +18,7 @@ class FavoriteMovieService {
         let favoriteList = await FavoriteList.findOne({ where: { UserId } })
         // if the user does not have a favorites list, then create it
         if (!favoriteList) {
-            throw ApiError.NotFound('The list of favorites of this user was not found')
+            favoriteList = await FavoriteList.create({ UserId })
         }         
 
         const favorite = await FavoriteMovie.findOne({ where: { FavoriteListId: favoriteList.id, MovieId} })
@@ -27,7 +27,10 @@ class FavoriteMovieService {
             throw ApiError.BadRequest(`This movie has already been added to the favorites list`)
         }
 
-        await FavoriteMovie.create({ FavoriteListId: favoriteList.id, MovieId })        
+        await FavoriteMovie.create({ FavoriteListId: favoriteList.id, MovieId }) 
+        
+        const favoriteMovie = await Movie.findOne({ where: { id: MovieId} })
+        return favoriteMovie       
     }
 
     async getAll(UserId: number) {
@@ -46,11 +49,15 @@ class FavoriteMovieService {
 
     async remove(UserId: number, MovieId: number) {        
         // find the list of favorites of this user
-        let userList = await FavoriteList.findOne({ where: { UserId } })
-        if (!userList) {
+        let favoriteList = await FavoriteList.findOne({ where: { UserId } })
+        if (!favoriteList) {
             throw ApiError.NotFound('The list of favorites of this user was not found')
         }     
-        await FavoriteMovie.destroy({ where: { FavoriteListId: userList.id, MovieId } })
+        const favorite = await FavoriteMovie.findOne({ where: { FavoriteListId: favoriteList.id, MovieId} })
+        if (!favorite) {
+            throw ApiError.BadRequest('The movie is not in the list of favorites')
+        }
+        await FavoriteMovie.destroy({ where: { FavoriteListId: favoriteList.id, MovieId } })
     }
 }
 

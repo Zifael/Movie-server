@@ -35,7 +35,8 @@ class TokenService {
     }
 
     validateAccessToken(accessToken: string){       
-        try {            
+        try {           
+            
             const userData = <UserIDJwtPayload>jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET as string)               
             return userData
         } catch (error) {

@@ -9,7 +9,7 @@ class MovieController {
         try {
             const movie = await movieService.create(req.body, req.files)            
             return res.json({ message: 'The film was successfully created', movie })
-        } catch (error) {                  
+        } catch (error) {                             
             next(error)            
         }
     }

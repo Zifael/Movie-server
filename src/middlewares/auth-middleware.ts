@@ -5,7 +5,9 @@ import { ReqHeader } from "../types";
 
 export const authMiddleware = (req: ReqHeader, res: Response, next: NextFunction) => {
     try {        
+        
         const authorizationHeader = req.headers.accesstoken as string
+        const refreshToken = req.cookies.refreshToken
         
         if (!authorizationHeader) {
             throw ApiError.UnauthorizedError()
@@ -15,8 +17,12 @@ export const authMiddleware = (req: ReqHeader, res: Response, next: NextFunction
         if (!accessToken) {
             throw ApiError.UnauthorizedError()
         }        
-        const data = tokenService.validateAccessToken(accessToken)         
-        if (!data) {
+        
+        
+        const isAccessTokenValid = tokenService.validateAccessToken(accessToken)   
+        const isRefreshTokenValid = tokenService.validateRefreshToken(refreshToken)      
+        
+        if (!isAccessTokenValid || !isRefreshTokenValid) {            
             throw ApiError.UnauthorizedError()
         }        
         next()

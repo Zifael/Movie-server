@@ -8,8 +8,8 @@ class FavoriteMovieController {
     async create(req: TypeRequestBody<IFavoriteRequest>, res: Response, next: NextFunction) {
         try {
             const { userId, movieId } = req.body
-            await favoriteMovieService.create(userId, movieId)
-            res.json({ message: 'The movie has been added to the favorites list' })
+            const favoriteMovie = await favoriteMovieService.create(userId, movieId)
+            res.json({ favoriteMovie, message: 'The movie has been added to the favorites list' })
         } catch (error) {
             next(error)
         }

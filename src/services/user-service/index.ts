@@ -132,13 +132,14 @@ class UserService {
         const resetCode = uuidv4()
         user.resetCode = resetCode
         await user.save()
-        mailService.sendResetPasswordMail(user.email, `${process.env.API_URL}/api/user/resetPassowrd/code=${resetCode}`, user.login)
+        mailService.sendResetPasswordMail(user.email, `${process.env.RESET_PASSWORD_URL}?code=${resetCode}`, user.login)
+        return resetCode
     }
 
     async resetPassword(code: string, password: string) {        
         const user = await User.findOne( { where: { resetCode: code } } )
         if (!user) {
-            throw ApiError.NotFound('User not found')
+            throw ApiError.NotFound('The password reset code is not correct')
         }
         const hashPassword = await bcrypt.hash(password, 5)  
         user.password = hashPassword

@@ -41,7 +41,6 @@ class RatingService {
             await ratingPrevious.save()
         }       
         
-        const ratings = await Rating.findAll({ where: { MovieId } })
         // Сounting all the ratings of the film
         const result = await calculatingRating(movie.id)
         //  Saving the rating of the movie in the database

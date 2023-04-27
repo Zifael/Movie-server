@@ -9,6 +9,8 @@ import swagerUI from 'swagger-ui-express'
 import swagger from './swager.json'
 import path from 'path'
 import cookieParser from 'cookie-parser'
+import { ApiError } from './exception/ApiEroor'
+
 const model = require('./models')
 
 const app = express()
@@ -30,6 +32,13 @@ app.use('/api', router)
 
 app.use('/api-docs', swagerUI.serve, swagerUI.setup(swagger))
 
+
+app.use(function(req, res, next) {
+    res.status(404);
+    if (req.accepts('html')) {
+       throw ApiError.NotFound('A request with this URL was not found')
+    }  
+});
 
 app.use(middlewareError)
 

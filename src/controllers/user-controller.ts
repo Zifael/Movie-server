@@ -84,8 +84,8 @@ class UserController {
     async sendMessageResetPassword(req: TypeRequestBody<{ email: string }>, res: Response, next: NextFunction) {
         try {
             const { email } = req.body
-            await userService.sendMessageResetPassword(email)
-            res.json({ message: 'The message has been sent' })
+            const resetCode = await userService.sendMessageResetPassword(email)
+            res.json({ resetCode, message: 'The message has been sent' })
         } catch (error) {
             next(error)
         }
@@ -94,8 +94,7 @@ class UserController {
     async resetPassword(req: TypeResetPassword, res: Response, next: NextFunction) {
         try {
             const { code } = req.query
-            const { password } = req.body
-            console.log(code, password)
+            const { password } = req.body                                     
             await userService.resetPassword(code, password)
             res.json({ message: 'reset'})
         } catch (error) {
