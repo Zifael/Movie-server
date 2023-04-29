@@ -75,7 +75,7 @@ class UserService {
         if (!hashPassword) {
             throw ApiError.BadRequest('Invalid password')
         } 
-        await tokenService.removeTokenAtLogin(user.id)
+        await tokenService.removeOldTokenAtLogin(user.id)
         return this.createTokenAndSaveDB(user)
     }
 

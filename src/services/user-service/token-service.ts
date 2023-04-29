@@ -29,7 +29,7 @@ class TokenService {
     }
 
 
-    async removeTokenAtLogin(UserId: number) {
+    async removeOldTokenAtLogin(UserId: number) {
         await RefreshToken.destroy({ where: { UserId } })
     }
 
