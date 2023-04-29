@@ -75,6 +75,7 @@ class UserService {
         if (!hashPassword) {
             throw ApiError.BadRequest('Invalid password')
         } 
+        await tokenService.removeTokenAtLogin(user.id)
         return this.createTokenAndSaveDB(user)
     }
 
@@ -93,6 +94,8 @@ class UserService {
         // find token in db
         const findToken = await tokenService.findToken(refreshToken)
         // If the Refreshtoken is not found in the database and the validation fails,  returns an error
+        console.log(userData)
+        console.log(findToken)
         if (!userData || !findToken) {
             throw ApiError.UnauthorizedError()
         }

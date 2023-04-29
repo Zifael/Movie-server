@@ -29,10 +29,14 @@ class TokenService {
     }
 
 
+    async removeTokenAtLogin(UserId: number) {
+        await RefreshToken.destroy({ where: { UserId } })
+    }
+
     async findToken(refreshToken: string) {
         const token = await RefreshToken.findOne({ where: { refreshToken } })        
         return token
-    }
+    }   
 
     validateAccessToken(accessToken: string){       
         try {           
