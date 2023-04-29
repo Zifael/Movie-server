@@ -57,7 +57,8 @@ class FavoriteMovieService {
         if (!favorite) {
             throw ApiError.BadRequest('The movie is not in the list of favorites')
         }
-        await FavoriteMovie.destroy({ where: { FavoriteListId: favoriteList.id, MovieId } })
+        let idRemoveFavoriteMovie = await FavoriteMovie.destroy({ where: { FavoriteListId: favoriteList.id, MovieId } })
+        return idRemoveFavoriteMovie
     }
 }
 

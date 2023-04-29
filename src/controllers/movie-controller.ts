@@ -44,8 +44,8 @@ class MovieController {
 
     async delete(req: TypeRequestBody<{ id: number }>, res: Response, next: NextFunction) {
         try {
-            await movieService.delete(req.body.id)
-            res.json({ message: 'Аниме удаленно' })
+            const idRemoveMovie = await movieService.delete(req.body.id)
+            res.json({ idRemoveMovie, message: 'Аниме удаленно' })
         } catch (error) {
             next(error)
         }

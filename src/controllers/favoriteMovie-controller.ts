@@ -28,8 +28,8 @@ class FavoriteMovieController {
     async remove(req: TypeRequestBody<IFavoriteRequest>, res: Response, next: NextFunction) {
         try {
             const { userId, movieId } = req.body
-            await favoriteMovieService.remove(userId, movieId)
-            res.json({ message: 'Movie removed from favorites' })
+            const idRemoveMovie = await favoriteMovieService.remove(userId, movieId)
+            res.json({ idRemoveMovie, message: 'Movie removed from favorites' })
         } catch (error) {
             next(error)
         }

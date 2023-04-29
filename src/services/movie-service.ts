@@ -128,7 +128,8 @@ class MovieService {
         // Deleting static files
         deleteFiles({ img: movie.img, video: movie.video })
 
-        await movie.destroy()   
+        const idRemoveMovie = await movie.destroy()   
+        return idRemoveMovie
     }
 }
 

@@ -9,7 +9,7 @@ const userRouter = Router()
 userRouter.post('/registration', validationFormMiddleware, userController.create)
 userRouter.post('/login', userController.login)
 userRouter.post('/logout', userController.logout)
-userRouter.post('/refresh', userController.refresh)
+userRouter.get('/refresh', userController.refresh)
 // Activating a profile by email
 userRouter.get('/activate/:link', userController.activate) 
 userRouter.put('/change-login', authMiddleware, userController.changeLogin)
