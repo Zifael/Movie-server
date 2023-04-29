@@ -89,13 +89,12 @@ class UserService {
     async refresh(refreshToken: string) {      
         if (!refreshToken) {
             throw ApiError.UnauthorizedError()
-        } 
+        }         
         const userData = tokenService.validateRefreshToken(refreshToken)
         // find token in db
         const findToken = await tokenService.findToken(refreshToken)
         // If the Refreshtoken is not found in the database and the validation fails,  returns an error
-        console.log(userData)
-        console.log(findToken)
+        
         if (!userData || !findToken) {
             throw ApiError.UnauthorizedError()
         }
