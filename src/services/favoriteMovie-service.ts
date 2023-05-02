@@ -1,5 +1,5 @@
 import { ApiError } from "../exception/ApiEroor"
-import { FavoriteList, FavoriteMovie, Movie } from "../models/movie-model/movieModel"
+import { FavoriteList, FavoriteMovie, Genre, Movie } from "../models/movie-model/movieModel"
 import { User } from "../models/user-model/userModel"
 
 
@@ -42,7 +42,10 @@ class FavoriteMovieService {
         // We get all the movies from the found list above   
         const favotiresMovie = await FavoriteMovie.findAll({ 
             where: { FavoriteListId: userList.id }, 
-            include: { all: true, nested: true },
+            include: {
+                model: Movie,
+                include: [ Genre ]              
+            },
         })
         return favotiresMovie
     }
