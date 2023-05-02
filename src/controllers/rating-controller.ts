@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { ratingService } from "../services/rating-service";
-import { TypeRequestBody } from "../types";
-import { IRatingReqRemove, IRatingRequest } from "../types/types-rating";
+import { TypeRequestBody, TypeRequestParams } from "../types";
+import { IGetMovieWitchRating, IRatingReqRemove, IRatingRequest } from "../types/types-rating";
 
 
 class RatingController {
@@ -10,6 +10,16 @@ class RatingController {
             const { userId, movieId, rating } = req.body            
             const data = await ratingService.add(userId, movieId, rating)
             res.json(data)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async getMovieWitchRating(req: IGetMovieWitchRating, res: Response, next: NextFunction) {
+        try {
+            const { userId } = req.query            
+            const movies = await ratingService.getMovie(userId)
+            res.json(movies)
         } catch (error) {
             next(error)
         }

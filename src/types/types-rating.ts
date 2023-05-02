@@ -4,8 +4,13 @@ export interface IRatingRequest {
     rating: number
 }
 
+export interface IGetMovieWitchRating {
+    query: {
+        userId: number
+    }
+}
+
 export interface IRatingReqRemove {
     userId: number,
-    movieId: number,
-    
+    movieId: number,    
 }

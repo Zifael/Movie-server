@@ -54,6 +54,13 @@ class RatingService {
         }
     }
 
+    async getMovie(UserId: number) {
+        const movies = await Rating.findAll({ 
+            where: { UserId }
+        })
+        return movies
+    }
+
     async remove(UserId: number, MovieId: number) {
         const rating = await Rating.findOne({ where: { UserId, MovieId } })
         const movie = await Movie.findOne({ where: { id: MovieId } })
