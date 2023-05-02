@@ -93,14 +93,19 @@ class UserService {
         const userData = tokenService.validateRefreshToken(refreshToken)
         // find token in db
         const findToken = await tokenService.findToken(refreshToken)
-        // If the Refreshtoken is not found in the database and the validation fails,  returns an error
-        
+
+        // If the Refreshtoken is not found in the database and the validation fails,  returns an error       
         if (!userData || !findToken) {
             throw ApiError.UnauthorizedError()
         }
-        const user = await User.findOne({ where: { email: userData.email } })  
+        const user = await User.findOne({ where: { email: userData.email } }) 
+        
+        if (!user) {
+            throw ApiError.BadRequest('User not found')
+        }
+        
         await tokenService.removeToken(refreshToken)      
-        return this.createTokenAndSaveDB(user!)
+        return this.createTokenAndSaveDB(user)
     }
 
     async changeLogin(id: number, login: string) {

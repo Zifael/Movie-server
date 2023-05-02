@@ -42,7 +42,7 @@ class FavoriteMovieService {
         // We get all the movies from the found list above   
         const favotiresMovie = await FavoriteMovie.findAll({ 
             where: { FavoriteListId: userList.id }, 
-            include: Movie
+            include: { all: true, nested: true },
         })
         return favotiresMovie
     }

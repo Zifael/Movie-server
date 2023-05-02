@@ -19,7 +19,7 @@ class FavoriteMovieController {
         try {
             const { userId } = req.query
             const favotiresMovie = await favoriteMovieService.getAll(userId)
-            res.json({ favotiresMovie })
+            res.json(favotiresMovie)
         } catch (error) {
             next(error)
         }
