@@ -21,6 +21,7 @@ class Movie extends Model<MovieModel, IMovieCreate> {
     declare status: 'Вышел' | 'Онгоинг' | 'Еще не вышел'
     declare releaseDate: string
     declare description: string   
+    declare isFavorites: boolean
     declare video: string  
     declare img?: string     
 }
@@ -62,6 +63,7 @@ Movie.init(
         status: { type: DataTypes.STRING, allowNull: false },
         releaseDate: { type: DataTypes.STRING, allowNull: false },
         description: { type: DataTypes.STRING },
+        isFavorites: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
         video: { type: DataTypes.STRING, allowNull: false },
         img: { type: DataTypes.STRING }
     },

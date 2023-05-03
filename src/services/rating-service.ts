@@ -56,7 +56,8 @@ class RatingService {
 
     async getMovie(UserId: number) {
         const movies = await Rating.findAll({ 
-            where: { UserId }
+            where: { UserId },
+            attributes: [ 'rating' ,'MovieId' ]
         })
         return movies
     }

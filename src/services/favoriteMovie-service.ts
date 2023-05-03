@@ -29,8 +29,18 @@ class FavoriteMovieService {
 
         await FavoriteMovie.create({ FavoriteListId: favoriteList.id, MovieId }) 
         
-        const favoriteMovie = await Movie.findOne({ where: { id: MovieId} })
-        return favoriteMovie       
+        const movie = await Movie.findOne({ 
+            where: { id: MovieId},
+            include: Genre 
+        })
+
+        if (!movie) {
+            throw ApiError.NotFound('The movie was not found when adding to favorites')
+        }
+        movie.isFavorites = true
+        await movie.save()
+        
+        return movie       
     }
 
     async getAll(UserId: number) {

@@ -15,7 +15,7 @@ class RatingController {
         }
     }
 
-    async getMovieWitchRating(req: IGetMovieWitchRating, res: Response, next: NextFunction) {
+    async getMovieWithRating(req: IGetMovieWitchRating, res: Response, next: NextFunction) {
         try {
             const { userId } = req.query            
             const movies = await ratingService.getMovie(userId)
