@@ -10,11 +10,10 @@ export interface MovieModel {
     status: 'Вышел' | 'Онгоинг' | 'Еще не вышел'
     releaseDate: string
     description: string
-    isFavorites: boolean
     video: string
     img?: string
 }
-export interface IMovieCreate extends Optional<MovieModel, 'id' | 'rating' | 'numberOfRating' | 'isFavorites'>{}
+export interface IMovieCreate extends Optional<MovieModel, 'id' | 'rating' | 'numberOfRating'>{}
 
 export type RaitingModel = {
     id: number 
