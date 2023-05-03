@@ -76,6 +76,11 @@ class RatingService {
         movie.rating = result
         movie.numberOfRating -= 1
         await movie.save()
+
+        return {
+            movieRating: movie.rating,
+            numberOfRating: movie.numberOfRating
+        }
     }
 }
 

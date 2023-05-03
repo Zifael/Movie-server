@@ -28,8 +28,8 @@ class RatingController {
     async remove(req: TypeRequestBody<IRatingReqRemove>, res: Response, next: NextFunction) {
         try {
             const { userId, movieId } = req.body
-            await ratingService.remove(userId, movieId)
-            res.json({ message: 'Rating removed' })
+            const data = await ratingService.remove(userId, movieId)
+            res.json(data)
         } catch (error) {
             next(error)
         }
