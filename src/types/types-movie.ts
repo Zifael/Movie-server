@@ -11,9 +11,9 @@ export interface IMovie {
 }
 
 export interface IQueryMovie {
-    genre: string | string[]
-    limit: number
-    page: number
+    genre?: number | number[]
+    limit?: number
+    page?: number
 }
 
 export interface IUpdateMovie {

@@ -9,7 +9,7 @@ export class GenreService {
         } 
         
         const createGenre = await Genre.create({genre})
-        return createGenre.genre        
+        return createGenre       
     }
 }
 

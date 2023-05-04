@@ -49,7 +49,7 @@ class MovieService {
                 include: {
                     model: Genre,
                     where: {
-                        genre
+                        id: genre
                     }
                 },
                 limit,

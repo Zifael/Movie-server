@@ -19,7 +19,7 @@ class GenreController {
 
             const genreCreate = await genreService.create(genre)
 
-            return res.json({message: 'Жанр успешно создан', genre: genreCreate})
+            return res.json({ genre: genreCreate})
             
         } catch (error) {
             next(error)
